@@ -45,13 +45,9 @@ add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode
 apt-get update && apt-get install -y code libasound2
 
 # Install VSCode extensions
-RUN code --no-sandbox --user-data-dir --install-extension ms-vscode.cpptools \
-    ms-vscode.cpptools-extension-pack \
-    ms-vscode.cpptools-themes \
-    twxs.cmake \
-    ms-python.python \
-    vscode-icons-team.vscode-icons \
-    vscodevim.vim
+COPY conf/install_vscode_extensions.sh /tmp/
+RUN /tmp/install_vscode_extensions.sh  
+RUN echo "alias code='code --no-sandbox --user-data-dir ~/vscode'" >> ~/.bashrc
 
 # ------------------------------------------------------------------------------
 # Install platform tools
@@ -84,9 +80,6 @@ RUN unzip /tmp/CyberChef_${CYBCHEF_VERS}.zip -d /opt/CyberChef_${CYBCHEF_VERS}
 RUN echo "alias cyberchef='google-chrome-stable --no-sandbox /opt/CyberChef_${CYBCHEF_VERS}/CyberChef_${CYBCHEF_VERS}.html'" >> ~/.bashrc
 
 # ------------------------------------------------------------------------------
-# Install lazygit
-
-# ------------------------------------------------------------------------------
 # Install extraneous 
 RUN wget https://github.com/AlpineGrizzly/go-maze-gen/archive/refs/heads/main.zip -O /tmp/gomaze.zip
 RUN unzip /tmp/gomaze.zip -d /opt/
@@ -110,13 +103,13 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # ------------------------------------------------------------------------------
 # Install wallpaper scripts and configuration files
-COPY bg/snowglobefluorescence1HDfree.jpg /usr/share/backgrounds/
+COPY bg/rain_forest.jpg /usr/share/backgrounds/
 COPY conf/menu.xml /usr/share/ubuntu-desktop/openbox/
 
 # ------------------------------------------------------------------------------
 # Adjust autostart
 # RUN echo "\nhsetroot -center /usr/share/backgrounds/hardy_wallpaper_uhd.png" >>/usr/share/ubuntu-desktop/openbox/autostart
-RUN echo "\nhsetroot -center /usr/share/backgrounds/snowglobefluorescence1HDfree.jpg" >>/usr/share/ubuntu-desktop/openbox/autostart
+RUN echo "\nhsetroot -center /usr/share/backgrounds/rain_forest.jpg" >>/usr/share/ubuntu-desktop/openbox/autostart
 RUN echo "\n# Set Keyboard Rate\nxset r rate 195 35" >>/usr/share/ubuntu-desktop/openbox/autostart
 
 # ------------------------------------------------------------------------------
